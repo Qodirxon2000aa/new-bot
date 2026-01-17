@@ -12,12 +12,16 @@ body {
 }
 
 .dashboard {
-  min-height: 100vh;
-  background: #1A2026;
-  padding: 1px;
-  position: relative;
+  height: 100%;
+  overflow-y: auto;
   overflow-x: hidden;
+  background: #1A2026;
+  position: relative;
+
+  padding-top: 7%;      /* 👈 SHU YER */
+  padding-bottom: 90px; /* footer uchun */
 }
+
 
 /* Header (Header komponenti o'zicha stilga ega bo'lsa ham, joylashuv uchun) */
 .dashboard > *:first-child {
@@ -174,9 +178,7 @@ body {
 /* RESPONSIVE – Barcha qurilmalar uchun */
 
 @media (max-width: 480px) {
-  .dashboard {
-    padding: 1px;
-  }
+  
 
   .reklama {
     border-radius: 18px;
@@ -233,9 +235,7 @@ body {
 }
 
 @media (min-width: 769px) {
-  .dashboard {
-    padding: 1px;
-  }
+
 
   .reklama {
     max-width: 600px;
@@ -350,8 +350,11 @@ body {
   overflow-x: hidden;
   background: #1A2026;
   position: relative;
+
+  padding-top: 7%;      /* 👈 SHU YER */
   padding-bottom: 90px; /* footer uchun */
 }
+
 
 /* 🔒 MODAL OCHILGANDA */
 .dashboard.modal-lock {
