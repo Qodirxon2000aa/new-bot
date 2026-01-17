@@ -1,0 +1,118 @@
+/* OVERLAY */
+.am-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+}
+
+/* MODAL */
+.am-modal {
+  width: 90%;
+  max-width: 360px;
+  padding: 26px 24px 24px;
+  border-radius: 20px;
+  background: #111;
+  color: #fff;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+/* ICON */
+.am-icon {
+  font-size: 34px;
+  margin-bottom: 8px;
+  opacity: 0.9;
+}
+
+/* LABEL */
+.am-label {
+  font-size: 11px;
+  letter-spacing: 2px;
+  opacity: 0.5;
+  margin-bottom: 6px;
+}
+
+/* TITLE */
+.am-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+/* MESSAGE */
+.am-message {
+  font-size: 14px;
+  line-height: 1.5;
+  color: black;
+}
+
+/* BUTTON */
+.am-btn {
+  margin-top: 18px;
+  height: 44px;
+  width: 100%;
+  border-radius: 14px;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  background: #fff;
+  color: #000;
+}
+
+.am-btn:active {
+  transform: scale(0.97);
+}
+
+/* TYPES (FAINT ACCENT ONLY) */
+.success { --accent: #353839; }
+.error   { --accent: #ff5c5c; }
+.warning { --accent: #f5a623; }
+.info    { --accent: #4da3ff; }
+
+.am-icon {
+  color: var(--accent);
+}
+
+/* TOAST */
+.am-toast {
+  padding: 18px 20px;
+}
+
+.am-toast .am-label,
+.am-toast .am-title,
+.am-toast .am-btn {
+  display: none;
+}
+
+/* ANIMATIONS (VERY SOFT) */
+.am-in {
+  animation: fadeIn 0.25s ease-out;
+}
+
+.am-out {
+  animation: fadeOut 0.2s ease-in forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
