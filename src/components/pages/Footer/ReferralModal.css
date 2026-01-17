@@ -1,4 +1,4 @@
-/* OVERLAY */
+/* ================= OVERLAY ================= */
 .referral-overlay {
   position: fixed;
   inset: 0;
@@ -15,7 +15,7 @@
   background: rgba(0, 0, 0, 0);
 }
 
-/* FULLSCREEN MODAL */
+/* ================= FULLSCREEN MODAL ================= */
 .referral-fullscreen {
   width: 100%;
   height: 100vh;
@@ -45,7 +45,7 @@
   opacity: 0;
 }
 
-/* CLOSE BUTTON */
+/* ================= CLOSE BUTTON ================= */
 .close-btn {
   position: absolute;
   top: 16px;
@@ -61,11 +61,13 @@
   z-index: 10;
 }
 
-/* CONTENT */
+/* ================= CONTENT (🔥 5% TOP PADDING) ================= */
 .referral-content {
   flex: 1;
   overflow-y: auto;
-  padding: 24px 20px 40px;
+
+  /* 🔥 ASOSIY O‘ZGARISH */
+  padding: calc(5% + env(safe-area-inset-top)) 20px 40px;
 
   display: flex;
   flex-direction: column;
@@ -76,7 +78,7 @@
   -webkit-overflow-scrolling: touch;
 }
 
-/* LOTTIE */
+/* ================= LOTTIE ================= */
 .animation {
   width: 100%;
   height: 220px;
@@ -92,7 +94,7 @@
   border-radius: 12px;
 }
 
-/* TEXT */
+/* ================= TEXT ================= */
 .referral-content h2 {
   font-size: 24px;
   margin: 12px 0;
@@ -104,16 +106,21 @@
   margin-bottom: 24px;
 }
 
-/* INVITED FRIENDS COUNTER */
+/* ================= INVITED COUNTER ================= */
 .invited-counter {
   width: 100%;
   max-width: 400px;
   height: 120px;
-  background: linear-gradient(135deg, rgba(138, 43, 226, 0.15), rgba(75, 0, 130, 0.15));
+  background: linear-gradient(
+    135deg,
+    rgba(138, 43, 226, 0.15),
+    rgba(75, 0, 130, 0.15)
+  );
   border: 1px solid rgba(138, 43, 226, 0.3);
   border-radius: 20px;
   padding: 24px 20px;
-  margin: 0 0 24px 0;
+  margin-bottom: 24px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -140,7 +147,7 @@
   font-size: 40px;
 }
 
-/* ACTION BUTTONS */
+/* ================= ACTION BUTTONS ================= */
 .action-buttons {
   width: 100%;
   display: flex;
@@ -148,7 +155,6 @@
   margin-top: 24px;
 }
 
-/* INVITE BUTTON */
 .btn-invite {
   flex: 1;
   background: linear-gradient(135deg, #a855f7, #8b5cf6);
@@ -159,14 +165,12 @@
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .btn-invite:active {
   transform: scale(0.98);
 }
 
-/* COPY BUTTON */
 .btn-copy {
   width: 45px;
   height: 45px;
@@ -178,8 +182,6 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  flex-shrink: 0;
 }
 
 .btn-copy:active {
@@ -191,7 +193,17 @@
   height: 24px;
 }
 
-/* SMALL SCREENS */
+/* ================= WORD ================= */
+.worddd {
+  width: 100%;
+  padding: 5%;
+}
+
+.worddd p {
+  font-size: 17px;
+}
+
+/* ================= SMALL SCREENS ================= */
 @media (max-height: 650px) {
   .animation {
     height: 160px;
@@ -215,19 +227,10 @@
 @media (max-width: 380px) {
   .btn-invite {
     font-size: 14px;
-    padding: 10px 10px;
   }
 
   .btn-copy {
     width: 56px;
     height: 56px;
   }
-}
-
-.worddd{
-  width: 100%;
-  padding: 5%;
-}
-.worddd p{
-  font-size: 17px;
 }
