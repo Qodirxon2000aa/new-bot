@@ -135,11 +135,11 @@ export const TelegramProvider = ({ children }) => {
   };
 
   /* =========================
-     🎁 GIFT ORDER
+     🎁 GIFT ORDER (YANGI)
   ========================= */
   const createGiftOrder = async ({ giftId, sent, price }) => {
     try {
-      if (!user?.id) throw new Error("User yo'q");
+      if (!user?.id) throw new Error("User yo‘q");
 
       const uid = user.isTelegram ? user.id : "7521806735";
       const balance = Number(apiUser?.balance || 0);
@@ -184,60 +184,47 @@ export const TelegramProvider = ({ children }) => {
      🚀 INIT
   ========================= */
   useEffect(() => {
-    if (fetchedRef.current) return;
-    fetchedRef.current = true;
+  if (fetchedRef.current) return;
+  fetchedRef.current = true;
 
-    const tg = window.Telegram?.WebApp;
-    tg?.ready();
-    tg?.expand();
-    
-    // 🔥 Full screen uchun qo'shimcha sozlamalar
-    tg?.setHeaderColor?.('#000000');
-    tg?.setBackgroundColor?.('#000000');
-    tg?.enableClosingConfirmation?.();
-    
-    // Viewport balandligini maksimal qilish
-    if (tg?.isExpanded === false) {
-      tg?.expand();
-    }
-    
-    // CSS orqali ham to'liq ekranga yoyish
-    document.body.style.overflow = 'hidden';
-    document.documentElement.style.overflow = 'hidden';
-    document.body.style.height = '100vh';
-    document.body.style.margin = '0';
-    document.body.style.padding = '0';
+  const telegram = window.Telegram?.WebApp;
 
-    const tgUser = tg?.initDataUnsafe?.user;
+  if (telegram) {
+    telegram.ready();
+    telegram.expand();                // WebApp kengayadi
+    telegram.requestFullscreen();     // 🔥 FULL SCREEN
+    telegram.disableVerticalSwipes(); // 🔥 pastga tortib yopishni o‘chiradi
+    telegram.MainButton?.hide();      // 🔥 MainButton yashiriladi
+  }
 
-    if (tgUser?.id) {
-      setUser({
-        id: tgUser.id,
-        first_name: tgUser.first_name || "",
-        last_name: tgUser.last_name || "",
-        username: tgUser.username ? `@${tgUser.username}` : "",
-        photo_url: tgUser.photo_url || null,
-        isTelegram: true,
-      });
-      fetchUserFromApi(tgUser.id, true);
-    } else {
-      const devUser = {
-        id: "7521806735",
-        first_name: "Dev",
-        username: "@dev_user",
-        photo_url: null,
-        isTelegram: false,
-      };
-      setUser(devUser);
-      fetchUserFromApi(devUser.id, false);
-    }
-    
-    // Cleanup function
-    return () => {
-      document.body.style.overflow = '';
-      document.documentElement.style.overflow = '';
+  const tgUser = telegram?.initDataUnsafe?.user;
+
+  if (tgUser?.id) {
+    setUser({
+      id: tgUser.id,
+      first_name: tgUser.first_name || "",
+      last_name: tgUser.last_name || "",
+      username: tgUser.username ? `@${tgUser.username}` : "",
+      photo_url: tgUser.photo_url || null,
+      isTelegram: true,
+    });
+
+    fetchUserFromApi(tgUser.id, true);
+  } else {
+    // DEV MODE
+    const devUser = {
+      id: "7521806735",
+      first_name: "Dev",
+      username: "@dev_user",
+      photo_url: null,
+      isTelegram: false,
     };
-  }, []);
+
+    setUser(devUser);
+    fetchUserFromApi(devUser.id, false);
+  }
+}, []);
+
 
   return (
     <TelegramContext.Provider
