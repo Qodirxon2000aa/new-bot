@@ -192,9 +192,9 @@ export const TelegramProvider = ({ children }) => {
   if (telegram) {
     telegram.ready();
     telegram.expand();                // WebApp kengayadi
-    // telegram.requestFullscreen();     // 🔥 FULL SCREEN
-    // telegram.disableVerticalSwipes(); // 🔥 pastga tortib yopishni o‘chiradi
-    // telegram.MainButton?.hide();      // 🔥 MainButton yashiriladi
+    telegram.requestFullscreen();     // 🔥 FULL SCREEN
+    telegram.disableVerticalSwipes(); // 🔥 pastga tortib yopishni o‘chiradi
+    telegram.MainButton?.hide();      // 🔥 MainButton yashiriladi
   }
 
   const tgUser = telegram?.initDataUnsafe?.user;
