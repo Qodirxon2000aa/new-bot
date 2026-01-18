@@ -20,7 +20,7 @@ html, body, #root {
   background: #1A2026;
   width: 100vw;
   height: 100vh;
-  padding: calc(5vw + env(safe-area-inset-top))
+  padding: calc(0vw + env(safe-area-inset-top))
            calc(0vw + env(safe-area-inset-right))
            calc(0vw + env(safe-area-inset-bottom))
            calc(0vw + env(safe-area-inset-left));

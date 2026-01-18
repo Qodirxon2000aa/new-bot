@@ -1,22 +1,20 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./components/pages/Dashboard";
 import { TelegramProvider } from "../context/TelegramContext";
-import { SpeedInsights } from "@vercel/speed-insights/react";
 
 function App() {
   return (
     <TelegramProvider>
       <Router>
         {/* 🔥 Safe area wrapper */}
-        <div className="tg-safe-area">
+       
           <Routes>
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
 
-          <SpeedInsights />
-        </div>
+      
       </Router>
     </TelegramProvider>
   );
