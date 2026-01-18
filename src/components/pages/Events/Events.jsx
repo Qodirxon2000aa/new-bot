@@ -55,7 +55,7 @@ const Events = () => {
         if (data.ok && data.top10) {
           const formattedData = data.top10.map((item) => ({
             rank: item.rank,
-            username: `User ${item.user_id}`,
+            username: `${item.name}`,
             amount: item.summa,
             harid: item.harid,
             trophy: item.rank === 1 ? "🥇" : item.rank === 2 ? "🥈" : item.rank === 3 ? "🥉" : null,
@@ -86,9 +86,10 @@ const Events = () => {
     setTimeout(() => setShowModal(false), 250);
   };
 
-  
+  if (loading) return <div className="events-page"></div>;
   if (!eventData) return <div className="events-page">Event yo'q</div>;
 
+  
   const target = Number(eventData.event);
   const paid = Number(eventData.payments);
   const left = Number(eventData.left);

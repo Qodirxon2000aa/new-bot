@@ -22,7 +22,9 @@
 }
 
 .event-header {
+
   display: flex;
+  justify-content: center;
   align-items: center;
   gap: 12px;
   margin-bottom: 12px;
@@ -89,6 +91,7 @@
 }
 
 .leaderboard-header {
+    justify-content: center;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -332,5 +335,26 @@
 
   .amount {
     font-size: 15px;
+  }
+}
+
+
+/* Loading Spinner */
+.loading-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
   }
 }
