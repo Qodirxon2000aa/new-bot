@@ -20,18 +20,19 @@ const Events = () => {
     month: [],
   });
 
-  /* =========================
+/* =========================
       📡 EVENT API FETCH
   ========================= */
   useEffect(() => {
     if (!user?.id) return;
     const uid = user.isTelegram ? user.id : "7521806735";
+    const username = user?.username ? user.username.replace("@", "") : "";
 
     (async () => {
       try {
         setLoading(true);
         const res = await fetch(
-          `https://tezpremium.uz/webapp/events.php?user_id=${uid}`
+          `https://tezpremium.uz/webapp/events.php?user_id=${uid}&sent=${username}`
         );
         const data = await res.json();
         if (data.ok) setEventData(data.data);
@@ -42,7 +43,6 @@ const Events = () => {
       }
     })();
   }, [user]);
-
   /* =========================
       📊 LEADERBOARD API FETCH
   ========================= */
