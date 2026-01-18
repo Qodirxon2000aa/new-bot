@@ -16,17 +16,13 @@ body {
   overflow-y: auto;
   overflow-x: hidden;
   background: #1A2026;
-  position: relative;
-
+  
   padding-top: 7%;      /* 👈 SHU YER */
-  padding-bottom: 90px; /* footer uchun */
+  padding-bottom: 70px; /* footer uchun */
 }
 
 
 /* Header (Header komponenti o'zicha stilga ega bo'lsa ham, joylashuv uchun) */
-.dashboard > *:first-child {
-  margin-bottom: 20px;
-}
 
 /* Reklama (markaziy katta karta) */
 .reklama {
@@ -320,7 +316,6 @@ body {
 
 
 .dashboard-content {
-  margin-top: 20px;
   display: flex;
   justify-content: center;
   width: 100%;
@@ -344,16 +339,6 @@ body {
 }
 
 /* 📱 DASHBOARD — YAGONA SCROLL MANBA */
-.dashboard {
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-  background: #1A2026;
-  position: relative;
-
-  padding-top: 7%;      /* 👈 SHU YER */
-  padding-bottom: 90px; /* footer uchun */
-}
 
 
 /* 🔒 MODAL OCHILGANDA */
@@ -363,7 +348,6 @@ body {
 
 /* CONTENT */
 .dashboard-content {
-  margin-top: 20px;
   display: flex;
   justify-content: center;
   width: 100%;
