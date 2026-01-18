@@ -19,7 +19,10 @@ const Stars = () => {
     message: "",
   });
 
+  const [userNotFoundToast, setUserNotFoundToast] = useState(false);
   const [username, setUsername] = useState("");
+  const [userInfo, setUserInfo] = useState(null);
+  const [checking, setChecking] = useState(false);
   const [amount, setAmount] = useState("");
   const [pricePerStar, setPricePerStar] = useState(0); // 1 Star narxi (UZS)
   const [loading, setLoading] = useState(true);
@@ -42,6 +45,37 @@ const Stars = () => {
       .finally(() => setLoading(false));
   }, []);
 
+  /* 👤 USERNAME CHECK */
+  useEffect(() => {
+    if (!username || username.trim().length < 4) {
+      setUserInfo(null);
+      setUserNotFoundToast(false);
+      return;
+    }
+
+    const clean = username.trim().replace("@", "");
+    setChecking(true);
+
+    fetch(`https://tezpremium.uz/starsapi/user.php?username=@${clean}`)
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.username) {
+          setUserInfo(d);
+          setUserNotFoundToast(false);
+        } else {
+          setUserInfo(null);
+          setUserNotFoundToast(true);
+          setTimeout(() => setUserNotFoundToast(false), 3000);
+        }
+      })
+      .catch(() => {
+        setUserInfo(null);
+        setUserNotFoundToast(true);
+        setTimeout(() => setUserNotFoundToast(false), 3000);
+      })
+      .finally(() => setChecking(false));
+  }, [username]);
+
   const balance = apiUser?.balance || 0;
   const totalPrice = amount && pricePerStar ? Number(amount) * pricePerStar : 0;
 
@@ -52,21 +86,16 @@ const Stars = () => {
   };
 
   const handleSubmit = async () => {
-    // Username tekshirish
-    if (!username || username.trim().length < 4) {
-      return openModal("error", "Xatolik", "Username kiriting");
-    }
+    if (!userInfo)
+      return openModal("error", "Xatolik", "Foydalanuvchi topilmadi");
 
-    // Amount tekshirish
-    if (Number(amount) < 50 || Number(amount) > 10000) {
+    if (Number(amount) < 50 || Number(amount) > 10000)
       return openModal(
         "warning",
-        "Noto'g'ri miqdor",
-        "50 – 10 000 oralig'ida bo'lishi kerak"
+        "Noto‘g‘ri miqdor",
+        "50 – 10 000 oralig‘ida bo‘lishi kerak"
       );
-    }
 
-    // Balans tekshirish
     if (balance < totalPrice) {
       const diff = totalPrice - balance;
       return openModal(
@@ -80,7 +109,7 @@ const Stars = () => {
     try {
       const res = await createOrder({
         amount: Number(amount),
-        sent: username.trim(),
+        sent: username,
         type: "Stars",
         overall: totalPrice,
       });
@@ -88,7 +117,6 @@ const Stars = () => {
       if (res.ok) {
         openModal("success", "Muvaffaqiyatli", "Telegram Stars yuborildi");
         setAmount("");
-        setUsername("");
       } else {
         openModal("error", "Xatolik", "Buyurtma bajarilmadi");
       }
@@ -119,16 +147,35 @@ const Stars = () => {
           <div className="tg-user-header">
             <div className="tg-user-title">Kimga yuboramiz?</div>
             <button className="tg-self-btn" onClick={handleSelf}>
-              O'zimga
+              O‘zimga
             </button>
           </div>
 
-          <input
-            className="tg-user-input"
-            placeholder="Telegram @username..."
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
+          {!userInfo ? (
+            <input
+              className="tg-user-input"
+              placeholder="Telegram @username..."
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          ) : (
+            <div className="tg-user-chip">
+              <img src={userInfo.photo} alt="avatar" />
+              <div className="tg-user-info">
+                <div className="tg-user-name">{userInfo.name}</div>
+                <div className="tg-user-username">@{userInfo.username}</div>
+              </div>
+              <button
+                className="tg-user-clear"
+                onClick={() => {
+                  setUsername("");
+                  setUserInfo(null);
+                }}
+              >
+                ×
+              </button>
+            </div>
+          )}
         </div>
 
         {/* AMOUNT INPUT */}
@@ -154,7 +201,7 @@ const Stars = () => {
           ))}
         </div>
 
-        {/* KO'PROQ PRESETLAR */}
+        {/* KO‘PROQ PRESETLAR */}
         <div
           className={`preset-list more ${
             showMore ? "fade-in" : "fade-out"
@@ -176,7 +223,7 @@ const Stars = () => {
           className="show-more-btn"
           onClick={() => setShowMore((v) => !v)}
         >
-          {showMore ? "Yopish ▲" : "Ko'proq ko'rsat ▼"}
+          {showMore ? "Yopish ▲" : "Ko‘proq ko‘rsat ▼"}
         </button>
 
         <div className="total">
@@ -185,7 +232,7 @@ const Stars = () => {
 
         <button
           className="buy-btn1"
-          disabled={sending || !username || !amount || loading}
+          disabled={sending || !userInfo || !amount || loading}
           onClick={handleSubmit}
         >
           {sending ? "Yuborilmoqda..." : "Sotib olish"}
@@ -198,6 +245,14 @@ const Stars = () => {
         title={modal.title}
         message={modal.message}
         onClose={() => setModal({ ...modal, open: false })}
+      />
+
+      <AnimatedModal
+        open={userNotFoundToast}
+        type="info"
+        message="Foydalanuvchi topilmadi. @username tekshiring."
+        onClose={() => setUserNotFoundToast(false)}
+        small
       />
     </div>
   );

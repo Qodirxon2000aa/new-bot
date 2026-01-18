@@ -10,6 +10,9 @@ const PremiumModal = ({ onClose = () => {} }) => {
   const { createPremiumOrder, apiUser, user, refreshUser } = useTelegram();
 
   const [username, setUsername] = useState("");
+  const [userInfo, setUserInfo] = useState(null);
+  const [checking, setChecking] = useState(false);
+
   const [selectedPlan, setSelectedPlan] = useState("3");
   const [sending, setSending] = useState(false);
   const [validationError, setValidationError] = useState("");
@@ -72,6 +75,23 @@ const PremiumModal = ({ onClose = () => {} }) => {
     },
   ];
 
+  /* 👤 USER PREVIEW */
+  useEffect(() => {
+    if (!username || username.trim().length < 4) {
+      setUserInfo(null);
+      return;
+    }
+
+    const clean = username.trim().replace("@", "");
+    setChecking(true);
+
+    fetch(`https://tezpremium.uz/starsapi/user.php?username=@${clean}`)
+      .then((r) => r.json())
+      .then((d) => (d?.username ? setUserInfo(d) : setUserInfo(null)))
+      .catch(() => setUserInfo(null))
+      .finally(() => setChecking(false));
+  }, [username]);
+
   const handleSelfClick = () => {
     if (user?.username) {
       setUsername("@" + user.username.replace("@", ""));
@@ -84,9 +104,8 @@ const PremiumModal = ({ onClose = () => {} }) => {
   const handleBuy = async () => {
     setValidationError("");
 
-    // Username tekshirish
-    if (!username || username.trim().length < 4) {
-      setValidationError("Username kiriting");
+    if (!userInfo) {
+      setValidationError("Foydalanuvchi topilmadi");
       return;
     }
 
@@ -132,6 +151,7 @@ const PremiumModal = ({ onClose = () => {} }) => {
 
       // Reset form
       setUsername("");
+      setUserInfo(null);
       setSelectedPlan("3");
     } catch (e) {
       console.error("PREMIUM ERROR:", e);
@@ -168,12 +188,31 @@ const PremiumModal = ({ onClose = () => {} }) => {
             </button>
           </div>
 
-          <input
-            className="tg-user-input"
-            placeholder="Telegram @username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
+          {!userInfo ? (
+            <input
+              className="tg-user-input"
+              placeholder="Telegram @username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          ) : (
+            <div className="tg-user-chip">
+              <img src={userInfo.photo} alt="avatar" />
+              <div className="tg-user-info">
+                <div className="tg-user-name">{userInfo.name}</div>
+                <div className="tg-user-username">@{userInfo.username}</div>
+              </div>
+              <button
+                className="tg-user-clear"
+                onClick={() => {
+                  setUsername("");
+                  setUserInfo(null);
+                }}
+              >
+                ×
+              </button>
+            </div>
+          )}
         </div>
 
         {/* PLANS */}
@@ -202,7 +241,7 @@ const PremiumModal = ({ onClose = () => {} }) => {
 
         <button
           className="buy-button"
-          disabled={sending || !username || loadingPrices}
+          disabled={sending || !userInfo || loadingPrices}
           onClick={handleBuy}
         >
           {sending ? "Yuborilmoqda..." : "Telegram Premium sovg'a qilish"}
