@@ -42,7 +42,7 @@ const Footer = ({
           <MdStorefront className="footer-icon" />
           <span>Market</span>
         </button>
-
+z
         {/* 👤 Profil */}
         <button
           className={`footer-item ${activeSection === "profile" ? "active" : ""}`}

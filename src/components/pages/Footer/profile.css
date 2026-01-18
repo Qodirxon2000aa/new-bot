@@ -15,6 +15,7 @@
   height: 100%;
   background: #1c1c1e;
   color: white;
+  padding: 24px 20px;
   animation: slideIn 0.45s cubic-bezier(0.22, 1, 0.36, 1);
   position: relative;
 }
@@ -105,6 +106,7 @@
   max-height: 100%;             /* ixtiyoriy: yuqoridan/pastdan biroz bo'sh joy qoldirish uchun */
   background: #1c1c1e;
   color: white;
+  padding: 24px 20px;
   border-radius: 16px;         /* qo'shdim: chiroyli ko'rinish uchun (mobilada ham ishlaydi) */
   overflow-y: auto;            /* kontent ko'p bo'lsa scroll */
   animation: fadeInScale 0.45s cubic-bezier(0.22, 1, 0.36, 1); /* animatsiyani o'zgartirdim */
@@ -144,6 +146,7 @@
   height: 100%;
   background: #1c1c1e;
   color: white;
+  padding: 24px 20px;
   position: relative;
   overflow-y: auto;
   box-shadow: -8px 0 32px rgba(0,0,0,0.3); /* ixtiyoriy: chiroyli soya */
@@ -265,7 +268,7 @@
   height: 100%;
   background: #1c1c1e;
   color: #fff;
-  padding:  14px 20px;
+  padding: 24px 20px;
   position: relative;
   overflow-y: auto;
   box-shadow: -8px 0 32px rgba(0, 0, 0, 0.3);

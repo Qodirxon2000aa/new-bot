@@ -64,7 +64,7 @@ const Profile = ({ onClose }) => {
           className={`profile-panel ${closing ? "closing" : ""}`}
           onClick={(e) => e.stopPropagation()}
         >
-        
+          <button className="profile-close" onClick={handleClose}>×</button>
 
           {/* HEADER */}
           {/* HEADER */}
