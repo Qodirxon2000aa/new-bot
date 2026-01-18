@@ -86,7 +86,7 @@ const Events = () => {
     setTimeout(() => setShowModal(false), 250);
   };
 
-  if (loading) return <div className="events-page">Yuklanmoqda...</div>;
+  
   if (!eventData) return <div className="events-page">Event yo'q</div>;
 
   const target = Number(eventData.event);

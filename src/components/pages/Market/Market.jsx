@@ -215,7 +215,7 @@ const Market = ({ onClose }) => {
 
         {/* GIFTS GRID */}
         <div className="gifts-grid">
-          {initialLoading && <p className="loading-text">Yuklanmoqda...</p>}
+         
 
           {!initialLoading && giftsData.length === 0 && (
             <div className="empty-state">
