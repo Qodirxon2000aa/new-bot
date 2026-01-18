@@ -14,12 +14,12 @@ import Footer from "./Footer/Footer.jsx";
 import ReferralModal from "./Footer/ReferralModal.jsx";
 import Money from "../../components/pages/Money/Money.jsx";
 import Profile from "./Footer/Profile.jsx";
+import Premium from "./premuium/Premium.jsx"
+import Stars from "./starts/Stars.jsx"
 
 /* ===============================
    🔥 LAZY COMPONENTS
 ================================ */
-const Premium = lazy(() => import("../pages/premuium/Premium.jsx"));
-const Stars = lazy(() => import("../pages/starts/Stars.jsx"));
 const Market = lazy(() => import("../pages/Market/Market.jsx"));
 const Events = lazy(() => import("../pages/Events/Events.jsx")); // YANGI: Events lazy
 
