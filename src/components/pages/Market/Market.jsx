@@ -1,3 +1,4 @@
+// src/pages/market/Market.jsx
 import React, { useEffect, useState, useRef } from "react";
 import { useTelegram } from "../../../../context/TelegramContext";
 import "./Market.css";
@@ -6,7 +7,10 @@ const Market = ({ onClose }) => {
   const [selectedGift, setSelectedGift] = useState(null);
   const [type, setType] = useState("all");
   const [giftsData, setGiftsData] = useState([]);
-  const [initialLoading, setInitialLoading] = useState(true); // Faqat birinchi yuklash uchun
+  
+  // Yangi: Faqat initial loading — API tugamaguncha spinner
+  const [loading, setLoading] = useState(true);
+
   const [showPurchaseModal, setShowPurchaseModal] = useState(false);
   const [recipient, setRecipient] = useState("");
   const [userInfo, setUserInfo] = useState(null);
@@ -21,7 +25,7 @@ const Market = ({ onClose }) => {
   const timeoutRef = useRef(null);
   const intervalRef = useRef(null);
 
-  /* ================= JIMLIKCHA YANGILANADIGAN FETCH ================= */
+  /* ================= GIFTLARNI YUKLASH ================= */
   const fetchGifts = async () => {
     const url =
       type === "all"
@@ -34,7 +38,6 @@ const Market = ({ onClose }) => {
 
       if (d.ok && Array.isArray(d.gifts)) {
         setGiftsData((prev) => {
-          // Agar ma'lumot bir xil bo'lsa — rerender bo'lmasin
           if (JSON.stringify(prev) === JSON.stringify(d.gifts)) {
             return prev;
           }
@@ -44,20 +47,21 @@ const Market = ({ onClose }) => {
         setGiftsData([]);
       }
     } catch (err) {
-      console.warn("Giftlar yangilanishda xato:", err);
+      console.warn("Giftlar yuklashda xato:", err);
+      setGiftsData([]);
     } finally {
-      setInitialLoading(false); // Birinchi yuklash tugagach o'chiramiz
+      setLoading(false); // Har doim loadingni o'chiramiz
     }
   };
 
-  /* ================= HAR 5 SEKUNDDA YANGILANISH ================= */
+  /* ================= HAR 5 SEKUNDDA JIM YANGILANISH ================= */
   useEffect(() => {
-    setInitialLoading(true);
+    setLoading(true); // Yangi type tanlansa — qayta loading
     fetchGifts();
 
     intervalRef.current = setInterval(() => {
-      fetchGifts(); // Jim yangilanish
-    }, 5000); // 5 sekund
+      fetchGifts(); // Jim yangilanish (loading o'zgarmaydi)
+    }, 5000);
 
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
@@ -167,7 +171,7 @@ const Market = ({ onClose }) => {
 
       if (res.ok) {
         await refreshUser();
-        fetchGifts(); // Darhol yangilash
+        fetchGifts(); // Yangilash
 
         setShowPurchaseModal(false);
         setShowSuccessModal(true);
@@ -189,6 +193,15 @@ const Market = ({ onClose }) => {
       setPurchasing(false);
     }
   };
+
+  /* ================= LOADING SPINNER ================= */
+  if (loading) {
+    return (
+      <div className="market-loading-full">
+        <div className="spinner"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="market-overlay" onClick={onClose}>
@@ -215,17 +228,13 @@ const Market = ({ onClose }) => {
 
         {/* GIFTS GRID */}
         <div className="gifts-grid">
-         
-
-          {!initialLoading && giftsData.length === 0 && (
+          {giftsData.length === 0 ? (
             <div className="empty-state">
               <div className="empty-icon">❌</div>
               <h3>Giftlar topilmadi</h3>
               <p>Boshqa kategoriya tanlab ko‘ring</p>
             </div>
-          )}
-
-          {!initialLoading &&
+          ) : (
             giftsData.map((gift) => (
               <div key={gift.id} className="gift-card" onClick={() => setSelectedGift(gift)}>
                 <div className="gift-image">
@@ -241,7 +250,8 @@ const Market = ({ onClose }) => {
                   </div>
                 </div>
               </div>
-            ))}
+            ))
+          )}
         </div>
       </div>
 

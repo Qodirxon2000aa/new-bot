@@ -5,61 +5,77 @@ import "./Events.css";
 
 const Events = () => {
   const { user } = useTelegram();
+
   const [eventData, setEventData] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  // 🔥 MODAL STATE
-  const [showModal, setShowModal] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
-
-  // 📊 LEADERBOARD STATE
-  const [activeTab, setActiveTab] = useState("today");
   const [leaderboardData, setLeaderboardData] = useState({
     today: [],
     week: [],
     month: [],
   });
 
-/* =========================
+  // Alohida loading holatlari
+  const [loadingEvents, setLoadingEvents] = useState(true);
+  const [loadingLeaderboard, setLoadingLeaderboard] = useState(true);
+
+  // Umumiy loading — ikkalasi ham tugamaguncha true
+  const loading = loadingEvents || loadingLeaderboard;
+
+  // Modal state
+  const [showModal, setShowModal] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  // Leaderboard tab
+  const [activeTab, setActiveTab] = useState("today");
+
+  /* =========================
       📡 EVENT API FETCH
   ========================= */
   useEffect(() => {
-    if (!user?.id) return;
+    if (!user?.id) {
+      setLoadingEvents(false); // user yo'q bo'lsa ham loading tugatamiz
+      return;
+    }
+
     const uid = user.isTelegram ? user.id : "7521806735";
     const username = user?.username ? user.username.replace("@", "") : "";
-    // console.log(username);
 
     (async () => {
       try {
-        setLoading(true);
+        setLoadingEvents(true);
         const res = await fetch(
           `https://tezpremium.uz/webapp/events.php?user_id=${uid}&sent=${username}`
         );
         const data = await res.json();
-        if (data.ok) setEventData(data.data);
+
+        if (data.ok && data.data) {
+          setEventData(data.data);
+        }
       } catch (e) {
-        console.error(e);
+        console.error("Events fetch error:", e);
       } finally {
-        setLoading(false);
+        setLoadingEvents(false);
       }
     })();
   }, [user]);
+
   /* =========================
       📊 LEADERBOARD API FETCH
   ========================= */
   useEffect(() => {
     (async () => {
       try {
+        setLoadingLeaderboard(true);
         const res = await fetch("https://tezpremium.uz/webapp/week.php");
         const data = await res.json();
-        
+
         if (data.ok && data.top10) {
           const formattedData = data.top10.map((item) => ({
             rank: item.rank,
             username: `${item.name}`,
             amount: item.summa,
             harid: item.harid,
-            trophy: item.rank === 1 ? "🥇" : item.rank === 2 ? "🥈" : item.rank === 3 ? "🥉" : null,
+            trophy:
+              item.rank === 1 ? "🥇" : item.rank === 2 ? "🥈" : item.rank === 3 ? "🥉" : null,
           }));
 
           setLeaderboardData({
@@ -70,6 +86,8 @@ const Events = () => {
         }
       } catch (e) {
         console.error("Leaderboard fetch error:", e);
+      } finally {
+        setLoadingLeaderboard(false);
       }
     })();
   }, []);
@@ -87,15 +105,28 @@ const Events = () => {
     setTimeout(() => setShowModal(false), 250);
   };
 
-  if (loading) return <div className="events-page"></div>;
-  if (!eventData) return <div className="events-page">Event yo'q</div>;
+  /* =========================
+      📄 LOADING SPINNER
+  ========================= */
+  if (loading) {
+    return (
+      <div className="events-page-loading">
+        <div className="spinner"></div>
+      </div>
+    );
+  }
 
-  
+  /* =========================
+      ❌ DATA YO'Q BO'LSA
+  ========================= */
+  if (!eventData) {
+    return <div className="events-page">Event maʼlumotlari mavjud emas</div>;
+  }
+
   const target = Number(eventData.event);
   const paid = Number(eventData.payments);
   const left = Number(eventData.left);
   const percent = Math.min((paid / target) * 100, 100);
-
 
   return (
     <div className="events-page">
@@ -207,9 +238,7 @@ const Events = () => {
           </div>
         </div>
       )}
-      
     </div>
-    
   );
 };
 
