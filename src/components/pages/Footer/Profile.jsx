@@ -125,13 +125,13 @@ const Profile = ({ onClose }) => {
               <strong>@{SUPPORT_CHANNEL} ›</strong>
             </div>
 
-            <div className="profile-item clickable" onClick={() => openTelegram(SUPPORT_DEV)}>
+            {/* <div className="profile-item clickable" onClick={() => openTelegram(SUPPORT_DEV)}>
               <div className="item-left">
                 <div className="item-icon"><FiUser /></div>
                 <span>Yaratuvchi</span>
               </div>
               <strong>@{SUPPORT_DEV} ›</strong>
-            </div>
+            </div> */}
           </div>
 
           <button
