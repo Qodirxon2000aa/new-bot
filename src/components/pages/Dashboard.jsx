@@ -1,4 +1,4 @@
-// Dashboard.jsx – FINAL OPTIMIZED VERSION (NO LAG 🚀)
+// Dashboard.jsx – FULL FINAL VERSION (Events qo'shilgan) 🚀
 import React, {
   useEffect,
   useState,
@@ -18,15 +18,10 @@ import Profile from "./Footer/Profile.jsx";
 /* ===============================
    🔥 LAZY COMPONENTS
 ================================ */
-const Premium = lazy(() =>
-  import("../pages/premuium/Premium.jsx")
-);
-const Stars = lazy(() =>
-  import("../pages/starts/Stars.jsx")
-);
-const Market = lazy(() =>
-  import("../pages/Market/Market.jsx")
-);
+const Premium = lazy(() => import("../pages/premuium/Premium.jsx"));
+const Stars = lazy(() => import("../pages/starts/Stars.jsx"));
+const Market = lazy(() => import("../pages/Market/Market.jsx"));
+const Events = lazy(() => import("../pages/Events/Events.jsx")); // YANGI: Events lazy
 
 const Dashboard = () => {
   const dashboardRef = useRef(null);
@@ -46,6 +41,8 @@ const Dashboard = () => {
   const finishedRef = useRef(false);
 
   const isMarketOpen = activeSection === "market";
+  const isEventsOpen = activeSection === "events"; // YANGI: Events ochiqmi?
+  const isFullScreenSection = isMarketOpen || isEventsOpen; // Market yoki Events ochiq bo'lsa header yashiriladi
 
   /* ===============================
      🔐 MODAL SCROLL LOCK (OPTIMIZED)
@@ -68,7 +65,7 @@ const Dashboard = () => {
 
     setShowWelcome(true);
 
-    // 🔥 async yuklash (UI bloklanmaydi)
+    // Async yuklash (UI bloklanmaydi)
     import("../../assets/animation.json").then((res) => {
       setAnimationData(res.default);
     });
@@ -107,8 +104,8 @@ const Dashboard = () => {
       {/* ================= DASHBOARD ================= */}
       {!showWelcome && (
         <div className="dashboard" ref={dashboardRef}>
-          {/* HEADER */}
-          {!isMarketOpen && (
+          {/* HEADER — Market yoki Events ochiq bo'lsa yashiriladi */}
+          {!isFullScreenSection && (
             <Header
               isPremium={isPremium}
               setIsPremium={setIsPremium}
@@ -116,22 +113,31 @@ const Dashboard = () => {
             />
           )}
 
-          {/* MAIN */}
+          {/* MAIN CONTENT */}
           <div
             className={`dashboard-main ${
-              isMarketOpen ? "market-full" : ""
+              isFullScreenSection ? "market-full" : ""
             }`}
           >
-            <Suspense fallback={<div className="loader" />}>
+            <Suspense fallback={<div className="loader">Yuklanmoqda...</div>}>
+              {/* HOME */}
               {activeSection === "home" && (
                 <div className="dashboard-content">
                   {isPremium ? <Premium /> : <Stars />}
                 </div>
               )}
 
-              {isMarketOpen && (
+              {/* MARKET */}
+              {activeSection === "market" && (
                 <div className="dashboard-content market-page">
                   <Market />
+                </div>
+              )}
+
+              {/* EVENTS — YANGI BO'LIM */}
+              {activeSection === "events" && (
+                <div className="dashboard-content market-page">
+                  <Events />
                 </div>
               )}
             </Suspense>
@@ -152,22 +158,23 @@ const Dashboard = () => {
             </div>
           )}
 
-          {/* REFERRAL */}
+          {/* REFERRAL MODAL */}
           <ReferralModal
             isOpen={showReferralModal}
             onClose={() => setShowReferralModal(false)}
           />
 
-          {/* PROFILE */}
+          {/* PROFILE MODAL */}
           {showProfile && (
             <Profile onClose={() => setShowProfile(false)} />
           )}
 
-          {/* FOOTER */}
+          {/* FOOTER — Yangi Events tugmasi bilan */}
           <Footer
             activeSection={activeSection}
             onHomeClick={() => setActiveSection("home")}
             onMarketClick={() => setActiveSection("market")}
+            onEventsClick={() => setActiveSection("events")} // YANGI
             onInviteClick={() => {
               setActiveSection("home");
               setShowReferralModal(true);

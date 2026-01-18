@@ -1,22 +1,22 @@
-// Footer.jsx – react-icons bilan
+// Footer.jsx
 import React from "react";
 import "./Footer.css";
 
 import { MdStorefront } from "react-icons/md";
-import { FiHome, FiUser, FiUserPlus } from "react-icons/fi";
+import { FiHome, FiUser, FiUserPlus, FiCalendar } from "react-icons/fi"; // FiCalendar qo'shildi
 
 const Footer = ({
   activeSection,
   onHomeClick,
   onMarketClick,
+  onEventsClick,     // YANGI prop
   onInviteClick,
   onProfileClick,
 }) => {
   return (
     <div className="footer">
       <div className="footer-content">
-
-        {/* 🔗 Taklif */}
+        {/* Taklif */}
         <button
           className={`footer-item ${activeSection === "invite" ? "active" : ""}`}
           onClick={onInviteClick}
@@ -25,7 +25,16 @@ const Footer = ({
           <span>Taklif</span>
         </button>
 
-        {/* 🏠 Asosiy */}
+        {/* YANGI: Events */}
+        <button
+          className={`footer-item ${activeSection === "events" ? "active" : ""}`}
+          onClick={onEventsClick}
+        >
+          <FiCalendar className="footer-icon" />
+          <span>Events</span>
+        </button>
+
+        {/* Asosiy */}
         <button
           className={`footer-item ${activeSection === "home" ? "active" : ""}`}
           onClick={onHomeClick}
@@ -34,7 +43,7 @@ const Footer = ({
           <span>Asosiy</span>
         </button>
 
-        {/* 🏪 Market */}
+        {/* Market */}
         <button
           className={`footer-item ${activeSection === "market" ? "active" : ""}`}
           onClick={onMarketClick}
@@ -43,7 +52,7 @@ const Footer = ({
           <span>Market</span>
         </button>
 
-        {/* 👤 Profil */}
+        {/* Profil */}
         <button
           className={`footer-item ${activeSection === "profile" ? "active" : ""}`}
           onClick={onProfileClick}
@@ -51,7 +60,6 @@ const Footer = ({
           <FiUser className="footer-icon" />
           <span>Profil</span>
         </button>
-
       </div>
     </div>
   );

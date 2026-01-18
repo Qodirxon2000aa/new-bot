@@ -286,7 +286,9 @@ const UserModal = ({ onClose }) => {
                   <div className="row-date">{item.date}</div>
                   <div className="row-toggle">
                     {expandedRow === item.id ? "↑" : "↓"}
+                    
                   </div>
+                  
                 </div>
                 <div
                   className={`user-row-details ${
