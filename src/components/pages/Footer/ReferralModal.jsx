@@ -133,8 +133,8 @@ const ReferralModal = ({ isOpen, onClose }) => {
 
           <div className="worddd">
             <p>
-              Taklif qilgan do'stingiz hisob to'ldirishidan
-              <b> 2% </b> ulush olasiz.
+              Taklif qilgan do'stingiz uchun
+              <b> 100 so'm </b> bonus olasiz.
             </p>
           </div>
         </div>
