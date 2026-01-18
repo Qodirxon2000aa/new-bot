@@ -15,7 +15,7 @@ export const TelegramProvider = ({ children }) => {
     try {
       setLoading(true);
       const actualUserId = !isTelegram ? "7521806735" : userId;
-      const url = `https://m4746.myxvest.ru/webapp/get_user.php?user_id=${actualUserId}`;
+      const url = `https://tezpremium.uz/webapp/get_user.php?user_id=${actualUserId}`;
       const res = await fetch(url, {
         headers: { Accept: "application/json" },
         cache: "no-cache",
@@ -42,7 +42,7 @@ export const TelegramProvider = ({ children }) => {
   const fetchOrders = async (userId, isTelegram = true) => {
     try {
       const actualUserId = !isTelegram ? "7521806735" : userId;
-      const url = `https://m4746.myxvest.ru/webapp/history.php?user_id=${actualUserId}`;
+      const url = `https://tezpremium.uz/webapp/history.php?user_id=${actualUserId}`;
       console.log("📦 Fetching orders from:", url);
       const res = await fetch(url);
       const data = await res.json();
@@ -58,7 +58,7 @@ export const TelegramProvider = ({ children }) => {
   const fetchPayments = async (userId, isTelegram = true) => {
     try {
       const actualUserId = !isTelegram ? "7521806735" : userId;
-      const url = `https://m4746.myxvest.ru/webapp/payments.php?user_id=${actualUserId}`;
+      const url = `https://tezpremium.uz/webapp/payments.php?user_id=${actualUserId}`;
       console.log("💳 Fetching payments from:", url);
       const res = await fetch(url);
       const data = await res.json();
@@ -75,7 +75,7 @@ export const TelegramProvider = ({ children }) => {
     try {
       const uid = user.isTelegram ? user.id : "7521806735";
       const url =
-        `https://m4746.myxvest.ru/webapp/order.php` +
+        `https://tezpremium.uz/webapp/order.php` +
         `?user_id=${uid}&amount=${amount}&sent=@${sent.replace("@", "")}` +
         `&type=${type}&overall=${overall}`;
       const res = await fetch(url);
@@ -96,7 +96,7 @@ export const TelegramProvider = ({ children }) => {
     try {
       const uid = user.isTelegram ? user.id : "7521806735";
       const url =
-        `https://m4746.myxvest.ru/webapp/premium.php` +
+        `https://tezpremium.uz/webapp/premium.php` +
         `?user_id=${uid}&amount=${months}&sent=${sent.replace("@", "")}` +
         `&overall=${overall}`;
       const res = await fetch(url);
@@ -123,7 +123,7 @@ export const TelegramProvider = ({ children }) => {
       }
       const cleanUsername = sent.startsWith("@") ? sent : `@${sent}`;
       const url =
-        `https://m4746.myxvest.ru/webapp/gifting.php` +
+        `https://tezpremium.uz/webapp/gifting.php` +
         `?user_id=${uid}` +
         `&gift_id=${giftId}` +
         `&sent=${encodeURIComponent(cleanUsername)}`;

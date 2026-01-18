@@ -25,8 +25,8 @@ const Market = ({ onClose }) => {
   const fetchGifts = async () => {
     const url =
       type === "all"
-        ? "https://m4746.myxvest.ru/webapp/giftlar.php"
-        : `https://m4746.myxvest.ru/webapp/giftlar.php?type=${type}`;
+        ? "https://tezpremium.uz/webapp/giftlar.php"
+        : `https://tezpremium.uz/webapp/giftlar.php?type=${type}`;
 
     try {
       const r = await fetch(url);

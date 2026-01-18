@@ -118,7 +118,7 @@ const Money = ({ onClose }) => {
     try {
       const actualUserId = user.isTelegram ? user.id : "7521806735";
       const res = await fetch(
-        `https://m4746.myxvest.ru/webapp/payments/review.php?user_id=${actualUserId}&amount=${numAmount}`
+        `https://tezpremium.uz/webapp/payments/review.php?user_id=${actualUserId}&amount=${numAmount}`
       );
 
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -146,7 +146,7 @@ const Money = ({ onClose }) => {
     const interval = setInterval(async () => {
       try {
         const res = await fetch(
-          `https://m4746.myxvest.ru/webapp/payments/status.php?payment_id=${pid}`
+          `https://tezpremium.uz/webapp/payments/status.php?payment_id=${pid}`
         );
 
         if (!res.ok) return;

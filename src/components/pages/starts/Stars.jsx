@@ -35,7 +35,7 @@ const Stars = () => {
 
   /* ⭐ PRICE - API dan olish */
   useEffect(() => {
-    fetch("https://m4746.myxvest.ru/webapp/settings.php")
+    fetch("https://tezpremium.uz/webapp/settings.php")
       .then((r) => r.json())
       .then((d) => {
         if (d.ok && d.settings?.price) {

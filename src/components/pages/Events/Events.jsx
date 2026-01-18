@@ -27,6 +27,7 @@ const Events = () => {
     if (!user?.id) return;
     const uid = user.isTelegram ? user.id : "7521806735";
     const username = user?.username ? user.username.replace("@", "") : "";
+    // console.log(username);
 
     (async () => {
       try {
@@ -94,6 +95,7 @@ const Events = () => {
   const paid = Number(eventData.payments);
   const left = Number(eventData.left);
   const percent = Math.min((paid / target) * 100, 100);
+
 
   return (
     <div className="events-page">
@@ -205,7 +207,9 @@ const Events = () => {
           </div>
         </div>
       )}
+      
     </div>
+    
   );
 };
 

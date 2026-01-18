@@ -33,7 +33,7 @@ const ReferralModal = ({ isOpen, onClose }) => {
     const fetchReferrals = async () => {
       try {
         const res = await fetch(
-          `https://m4746.myxvest.ru/webapp/referals.php?user_id=${user.id}`
+          `https://tezpremium.uz/webapp/referals.php?user_id=${user.id}`
         );
         const data = await res.json();
 
