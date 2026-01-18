@@ -1,9 +1,9 @@
-// pages/Money.jsx - TO'LIQ TUZATILGAN FINAL VERSIYA
+// pages/Money.jsx - FINAL VERSIYA (Karta raqami dinamik olinadi)
 import React, { useState, useEffect } from "react";
 import "./Money.css";
 import { useTelegram } from "../../../../context/TelegramContext";
 import MoneyImage from "../../../assets/money.json"; // Lottie JSON fayl
-import Lottie from "lottie-react"; // Muhim: lottie-react dan import
+import Lottie from "lottie-react";
 
 const Money = ({ onClose }) => {
   const { user, refreshUser } = useTelegram();
@@ -19,24 +19,41 @@ const Money = ({ onClose }) => {
   const [cardInfo, setCardInfo] = useState(null);
   const [showResult, setShowResult] = useState(false);
   const [resultType, setResultType] = useState("");
-  const [payStatus, setPayStatus] = useState(null);
+  const [payStatus, setPayStatus] = useState("off");
   const [showPaymentDisabled, setShowPaymentDisabled] = useState(false);
 
-  // Pay statusni tekshirish (har 5 sekundda)
+  // Global karta raqami (settings.php dan olinadi)
+  const [globalCardNumber, setGlobalCardNumber] = useState("9860 1766 1888 4538"); // default fallback
+
+  // Settings va pay_status ni har 5 sekundda tekshirish + karta raqamini yangilash
   useEffect(() => {
-    const checkPayStatus = async () => {
+    const fetchSettings = async () => {
       try {
         const res = await fetch("https://tezpremium.uz/webapp/settings.php");
         const data = await res.json();
-        setPayStatus(data.settings?.pay_status || "off");
+
+        if (data.ok && data.settings) {
+          setPayStatus(data.settings.pay_status || "off");
+
+          // Karta raqamini olamiz va formatlaymiz
+          if (data.settings.card) {
+            const rawCard = data.settings.card.replace(/\s/g, ""); // bo'shliqlarni tozalaymiz
+            if (rawCard.length === 16) {
+              const formatted = rawCard.replace(/(\d{4})(\d{4})(\d{4})(\d{4})/, "$1 $2 $3 $4");
+              setGlobalCardNumber(formatted);
+            }
+          }
+        } else {
+          setPayStatus("off");
+        }
       } catch (err) {
-        console.error("Pay status tekshirishda xatolik:", err);
+        console.error("Settings yuklashda xatolik:", err);
         setPayStatus("off");
       }
     };
 
-    checkPayStatus();
-    const interval = setInterval(checkPayStatus, 5000);
+    fetchSettings();
+    const interval = setInterval(fetchSettings, 5000); // har 5 sekundda yangilanadi
     return () => clearInterval(interval);
   }, []);
 
@@ -56,15 +73,11 @@ const Money = ({ onClose }) => {
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
-  // Modalni animatsiya bilan yopish
   const handleClose = () => {
     setIsClosing(true);
-    setTimeout(() => {
-      onClose();
-    }, 350);
+    setTimeout(() => onClose(), 350);
   };
 
-  // Muvaffaqiyatli to'lov
   const handlePaymentSuccess = async () => {
     setResultType("success");
     setShowResult(true);
@@ -79,7 +92,6 @@ const Money = ({ onClose }) => {
     }, 2500);
   };
 
-  // Xato holati
   const handlePaymentError = (msg = "To'lov bekor qilindi yoki muvaffaqiyatsiz") => {
     setResultType("error");
     setShowResult(true);
@@ -93,7 +105,6 @@ const Money = ({ onClose }) => {
     }, 2500);
   };
 
-  // To'lov yaratish
   const handleSubmit = async () => {
     setErrorMsg("");
 
@@ -128,7 +139,17 @@ const Money = ({ onClose }) => {
         setPaymentId(data.payment_id);
         setWaiting(true);
         setTimeLeft(600);
-        setCardInfo(data.card || { number: "9860 1766 1888 4538", owner: "O/I" });
+
+        // Agar review.php javobida card bo'lsa — undan, aks holda global settingsdan
+        const cardNumber = data.card
+          ? data.card
+          : globalCardNumber;
+
+        setCardInfo({
+          number: cardNumber,
+          owner: "O/I",
+        });
+
         checkPaymentStatus(data.payment_id);
       } else {
         setErrorMsg(data.message || "To'lov yaratishda xatolik");
@@ -141,14 +162,12 @@ const Money = ({ onClose }) => {
     }
   };
 
-  // To'lov holatini polling orqali tekshirish
   const checkPaymentStatus = (pid) => {
     const interval = setInterval(async () => {
       try {
         const res = await fetch(
           `https://tezpremium.uz/webapp/payments/status.php?payment_id=${pid}`
         );
-
         if (!res.ok) return;
         const data = await res.json();
 
@@ -164,18 +183,21 @@ const Money = ({ onClose }) => {
       }
     }, 5000);
 
+    // 10 daqiqadan keyin to'xtatish
     setTimeout(() => clearInterval(interval), 600000);
   };
 
-  // Nusxa olish
   const copyToClipboard = (text, label = "Ma'lumot") => {
-    navigator.clipboard.writeText(text).then(() => {
-      setToast(`${label} nusxalandi ✓`);
-      setTimeout(() => setToast(""), 2500);
-    }).catch(() => {
-      setToast("Nusxalashda xatolik");
-      setTimeout(() => setToast(""), 2500);
-    });
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        setToast(`${label} nusxalandi ✓`);
+        setTimeout(() => setToast(""), 2500);
+      })
+      .catch(() => {
+        setToast("Nusxalashda xatolik");
+        setTimeout(() => setToast(""), 2500);
+      });
   };
 
   return (
@@ -193,7 +215,7 @@ const Money = ({ onClose }) => {
             animationData={MoneyImage}
             loop={true}
             autoplay={true}
-            style={{ width: 200, height: 200 }} // kerak bo'lsa o'lcham berish
+            style={{ width: 200, height: 200 }}
           />
         </div>
 
