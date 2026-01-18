@@ -273,7 +273,9 @@ const UserModal = ({ onClose }) => {
               📭 {activeHistory === "orders" ? "Buyurtmalar" : "To'lovlar"} tarixida ma'lumot yo'q
             </p>
           ) : (
+
             historyData.map((item) => (
+              
               <div key={item.id} className="user-row-wrapper">
                 <div
                   className="user-table-row"
@@ -291,8 +293,7 @@ const UserModal = ({ onClose }) => {
                     expandedRow === item.id ? "expanded" : ""
                   }`}
                 >
-                  <div style={{ marginTop: '8px' }}>
-                  </div>
+                  
                   
                   {/* ✅ Orders uchun summa */}
                   {activeHistory === "orders" && item.summa && (
