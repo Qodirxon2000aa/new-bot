@@ -23,7 +23,7 @@ html, body, #root {
   height: 100vh;
   padding: calc(5vw + env(safe-area-inset-top))
            calc(0vw + env(safe-area-inset-right))
-           calc(0vw + env(safe-area-inset-bottom))
+           calc(5vw + env(safe-area-inset-bottom))
            calc(0vw + env(safe-area-inset-left));
   box-sizing: border-box;
   display: flex;
