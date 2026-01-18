@@ -1,19 +1,36 @@
-// Dashboard.jsx – FINAL VERSION (100% OPTIMIZED, NO LAG)
-import React, { useEffect, useState, useRef } from "react";
+// Dashboard.jsx – FINAL OPTIMIZED VERSION (NO LAG 🚀)
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  lazy,
+  Suspense,
+} from "react";
 import Lottie from "lottie-react";
 import "./Dashboard.css";
 
 import Header from "../pages/Header/Header.jsx";
-import Premium from "../pages/premuium/Premium.jsx";
-import Stars from "../pages/starts/Stars.jsx";
-import Market from "../pages/Market/Market.jsx";
-
 import Footer from "./Footer/Footer.jsx";
 import ReferralModal from "./Footer/ReferralModal.jsx";
 import Money from "../../components/pages/Money/Money.jsx";
 import Profile from "./Footer/Profile.jsx";
 
+/* ===============================
+   🔥 LAZY COMPONENTS
+================================ */
+const Premium = lazy(() =>
+  import("../pages/premuium/Premium.jsx")
+);
+const Stars = lazy(() =>
+  import("../pages/starts/Stars.jsx")
+);
+const Market = lazy(() =>
+  import("../pages/Market/Market.jsx")
+);
+
 const Dashboard = () => {
+  const dashboardRef = useRef(null);
+
   const [isPremium, setIsPremium] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
 
@@ -21,43 +38,40 @@ const Dashboard = () => {
   const [showReferralModal, setShowReferralModal] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
 
-  // 🔥 WELCOME STATE
+  /* ===============================
+     🔥 WELCOME STATE
+  ================================ */
   const [showWelcome, setShowWelcome] = useState(false);
-  const finishedRef = useRef(false);
-
-  // 🔥 animation.json async yuklanadi
   const [animationData, setAnimationData] = useState(null);
+  const finishedRef = useRef(false);
 
   const isMarketOpen = activeSection === "market";
 
   /* ===============================
-     🔐 MODAL SCROLL LOCK
-  =============================== */
+     🔐 MODAL SCROLL LOCK (OPTIMIZED)
+  ================================ */
   useEffect(() => {
-    const dashboard = document.querySelector(".dashboard");
-    if (!dashboard) return;
+    if (!dashboardRef.current) return;
 
     const locked =
       openModal === "money" || showReferralModal || showProfile;
 
-    dashboard.classList.toggle("modal-lock", locked);
-
-    return () => dashboard.classList.remove("modal-lock");
+    dashboardRef.current.classList.toggle("modal-lock", locked);
   }, [openModal, showReferralModal, showProfile]);
 
   /* ===============================
-     🚀 WELCOME FAqat 1 MARTA
-  =============================== */
+     🚀 WELCOME — FAQAT 1 MARTA
+  ================================ */
   useEffect(() => {
     const shown = sessionStorage.getItem("welcome_shown");
-    if (!shown) {
-      setShowWelcome(true);
+    if (shown) return;
 
-      // JSON NI ASYNC YUKLAYMIZ (UI BLOKLANMAYDI)
-      import("../../assets/animation.json").then((data) => {
-        setAnimationData(data.default);
-      });
-    }
+    setShowWelcome(true);
+
+    // 🔥 async yuklash (UI bloklanmaydi)
+    import("../../assets/animation.json").then((res) => {
+      setAnimationData(res.default);
+    });
   }, []);
 
   const handleAnimationComplete = () => {
@@ -80,6 +94,10 @@ const Dashboard = () => {
                 loop={false}
                 autoplay
                 onComplete={handleAnimationComplete}
+                rendererSettings={{
+                  progressiveLoad: true,
+                  preserveAspectRatio: "xMidYMid slice",
+                }}
               />
             )}
           </div>
@@ -88,7 +106,7 @@ const Dashboard = () => {
 
       {/* ================= DASHBOARD ================= */}
       {!showWelcome && (
-        <div className="dashboard">
+        <div className="dashboard" ref={dashboardRef}>
           {/* HEADER */}
           {!isMarketOpen && (
             <Header
@@ -104,17 +122,19 @@ const Dashboard = () => {
               isMarketOpen ? "market-full" : ""
             }`}
           >
-            {activeSection === "home" && (
-              <div className="dashboard-content">
-                {isPremium ? <Premium /> : <Stars />}
-              </div>
-            )}
+            <Suspense fallback={<div className="loader" />}>
+              {activeSection === "home" && (
+                <div className="dashboard-content">
+                  {isPremium ? <Premium /> : <Stars />}
+                </div>
+              )}
 
-            {activeSection === "market" && (
-              <div className="dashboard-content market-page">
-                <Market />
-              </div>
-            )}
+              {isMarketOpen && (
+                <div className="dashboard-content market-page">
+                  <Market />
+                </div>
+              )}
+            </Suspense>
           </div>
 
           {/* MONEY MODAL */}
