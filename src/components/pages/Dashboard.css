@@ -17,7 +17,8 @@ body {
   overflow-x: hidden;
   background: #1A2026;
   
-  padding-bottom: 19%;      /* 👈 SHU YER */
+  padding-top: 0%;      /* 👈 SHU YER */
+  padding-bottom: 70px; /* footer uchun */
 }
 
 
