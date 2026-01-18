@@ -98,7 +98,7 @@ const Profile = ({ onClose }) => {
                 <div className="item-icon"><FiCreditCard /></div>
                 <span>Balans</span>
               </div>
-              <strong>{balance} ⭐</strong>
+              <strong>{balance} UZS</strong>
             </div>
 
             <div className="profile-item clickable" onClick={() => setOpenLang(true)}>
