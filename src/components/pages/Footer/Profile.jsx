@@ -9,9 +9,9 @@ import { FiGlobe, FiHelpCircle, FiUser, FiCreditCard } from "react-icons/fi";
 import { FaTelegramPlane } from "react-icons/fa";
 
 /* SUPPORT */
-const SUPPORT_HELP = "ahdsiz";
-const SUPPORT_CHANNEL = "fatih_link";
-const SUPPORT_DEV = "behissiyot";
+const SUPPORT_HELP = "Legenda_adminn";
+const SUPPORT_CHANNEL = "UZBStarsbuy";
+const SUPPORT_DEV = "saviyali_bola";
 
 const Profile = ({ onClose }) => {
   const { user, apiUser, loading } = useTelegram();
