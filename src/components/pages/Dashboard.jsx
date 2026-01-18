@@ -119,7 +119,7 @@ const Dashboard = () => {
               isFullScreenSection ? "market-full" : ""
             }`}
           >
-            <Suspense fallback={<div className="loader">Yuklanmoqda...</div>}>
+            <Suspense fallback={<div className="loader"></div>}>
               {/* HOME */}
               {activeSection === "home" && (
                 <div className="dashboard-content">
